@@ -1,0 +1,43 @@
+<div class="container" style="padding: 20px; font-family: sans-serif;">
+  <h2>Editor de Imagem Inteligente</h2>
+
+  <!-- 1. Input de Arquivo -->
+  <input type="file" (change)="onFileSelected($event)" accept="image/*" />
+
+  <!-- Status de Carregamento -->
+  <p *ngIf="loading" style="color: blue; font-weight: bold;">
+    Processando IA (Removendo fundo)... Por favor, aguarde.
+  </p>
+
+  <!-- 2. Painel de Ferramentas (Aparece após remover o fundo) -->
+  <div *ngIf="imageWithoutBg" style="margin: 20px 0; display: flex; gap: 15px; align-items: center;">
+    <label><b>Trocar Fundo:</b></label>
+    <button (click)="changeBackground('transparent')">Transparente</button>
+    <button (click)="changeBackground('#ffffff')">Branco</button>
+    <button (click)="changeBackground('#ff4a4a')">Vermelho</button>
+    <button (click)="changeBackground('#4afe6e')">Verde</button>
+    
+    <button (click)="saveImage()" style="margin-left: auto; background: #007bff; color: white; padding: 8px 15px; border: none; border-radius: 4px; cursor: pointer;">
+      Exportar / Salvar
+    </button>
+  </div>
+
+  <!-- 3. Área do Cropper e Visualização -->
+  <div *ngIf="imageWithoutBg" class="cropper-wrapper" [style.background]="currentBgColor" style="max-width: 600px; border: 2px dashed #ccc; margin-top: 10px;">
+    <image-cropper
+      [imageBase64]="imageWithoutBg"
+      [maintainAspectRatio]="true"
+      [aspectRatio]="1 / 1" 
+      format="png"
+      (imageCropped)="onImageCropped($event)">
+    </image-cropper>
+  </div>
+
+  <!-- Caixa de Preview Fixo em 200x200 -->
+  <div *ngIf="croppedImageBase64">
+    <h3>Preview Final (200x200)</h3>
+    <div class="preview-container" [style.backgroundColor]="currentBgColor === 'transparent' ? '' : currentBgColor">
+      <img [src]="croppedImageBase64" alt="Preview" />
+    </div>
+  </div>
+</div>

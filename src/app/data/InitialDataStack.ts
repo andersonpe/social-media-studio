@@ -1,0 +1,60 @@
+import { TechItem } from "../types/TechItem/TechItem";
+
+export const INITIAL_TECH_STACK: TechItem[] = [
+  {
+    id: 'angular',
+    name: 'Angular',
+    shortLabel: 'Angular',
+    brandColor: '#DD0031',
+    accentBg: 'rgba(221, 0, 49, 0.14)',
+    enabled: true,
+  },
+  {
+    id: 'react',
+    name: 'React.js',
+    shortLabel: 'React.js',
+    brandColor: '#61DAFB',
+    accentBg: 'rgba(97, 218, 251, 0.14)',
+    enabled: true,
+  },
+  {
+    id: 'php',
+    name: 'PHP',
+    shortLabel: 'PHP',
+    brandColor: '#777BB4',
+    accentBg: 'rgba(119, 123, 180, 0.16)',
+    enabled: true,
+  },
+  {
+    id: 'dotnet',
+    name: '.NET',
+    shortLabel: '.NET',
+    brandColor: '#512BD4',
+    accentBg: 'rgba(81, 43, 212, 0.16)',
+    enabled: true,
+  },
+  {
+    id: 'postgresql',
+    name: 'PostgreSQL',
+    shortLabel: 'PostgreSQL',
+    brandColor: '#5B9BD5',
+    accentBg: 'rgba(91, 155, 213, 0.14)',
+    enabled: true,
+  },
+  {
+    id: 'oracle',
+    name: 'Oracle',
+    shortLabel: 'Oracle',
+    brandColor: '#F80000',
+    accentBg: 'rgba(248, 0, 0, 0.14)',
+    enabled: true,
+  },
+  {
+    id: 'sqlserver',
+    name: 'SQL Server',
+    shortLabel: 'SQL Server',
+    brandColor: '#EE3124',
+    accentBg: 'rgba(238, 49, 36, 0.14)',
+    enabled: true,
+  },
+];

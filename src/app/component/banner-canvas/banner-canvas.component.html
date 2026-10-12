@@ -1,0 +1,499 @@
+
+<svg
+  #svgRef
+  class="banner-canvas"
+  xmlns="http://www.w3.org/2000/svg"
+  [attr.viewBox]="'0 0 ' + width + ' ' + height"
+  [attr.width]="width"
+  [attr.height]="height"
+  role="img"
+  [attr.aria-label]="
+    'Banner profissional de ' + config().fullName
+  "
+>
+  <defs>
+    <linearGradient
+      id="banner-background-gradient"
+      x1="0%"
+      y1="0%"
+      x2="100%"
+      y2="100%"
+    >
+      <stop offset="0%" [attr.stop-color]="config().bgColor" />
+      <stop
+        offset="100%"
+        [attr.stop-color]="config().bgColor"
+        stop-opacity="0.88"
+      />
+    </linearGradient>
+
+    <linearGradient
+      id="banner-accent-gradient"
+      x1="0%"
+      y1="0%"
+      x2="100%"
+      y2="0%"
+    >
+      <stop
+        offset="0%"
+        [attr.stop-color]="config().accentColor"
+        stop-opacity="0.15"
+      />
+      <stop
+        offset="50%"
+        [attr.stop-color]="config().accentColor"
+        stop-opacity="0.9"
+      />
+      <stop
+        offset="100%"
+        [attr.stop-color]="config().accentColor"
+        stop-opacity="0.15"
+      />
+    </linearGradient>
+
+    <radialGradient id="banner-glow">
+      <stop
+        offset="0%"
+        [attr.stop-color]="config().accentColor"
+        stop-opacity="0.24"
+      />
+      <stop
+        offset="100%"
+        [attr.stop-color]="config().accentColor"
+        stop-opacity="0"
+      />
+    </radialGradient>
+
+    <pattern
+      id="banner-grid"
+      width="28"
+      height="28"
+      patternUnits="userSpaceOnUse"
+    >
+      <path
+        d="M 28 0 L 0 0 0 28"
+        fill="none"
+        [attr.stroke]="config().accentColor"
+        stroke-width="0.5"
+        stroke-opacity="0.13"
+      />
+    </pattern>
+
+    <clipPath id="banner-clip">
+      <rect width="1584" height="396" />
+    </clipPath>
+  </defs>
+
+  <g clip-path="url(#banner-clip)">
+    <!-- Background -->
+    <rect
+      width="1584"
+      height="396"
+      fill="url(#banner-background-gradient)"
+    />
+
+    <ellipse
+      cx="1150"
+      cy="195"
+      rx="530"
+      ry="290"
+      fill="url(#banner-glow)"
+    />
+
+    <ellipse
+      cx="200"
+      cy="20"
+      rx="420"
+      ry="240"
+      fill="url(#banner-glow)"
+      opacity="0.35"
+    />
+
+    <!-- Optional grid -->
+    @if (config().showSubtleGrid) {
+      <rect
+        width="1584"
+        height="396"
+        fill="url(#banner-grid)"
+      />
+    }
+
+    <!-- Constellation network -->
+    @if (config().networkStyle === 'constellation') {
+      <g
+        class="network"
+        [attr.opacity]="config().networkOpacity"
+      >
+        @for (edge of edges; track $index) {
+          <line
+            [attr.x1]="edge.x1"
+            [attr.y1]="edge.y1"
+            [attr.x2]="edge.x2"
+            [attr.y2]="edge.y2"
+            [attr.stroke]="config().accentColor"
+            stroke-width="0.8"
+            stroke-opacity="0.45"
+          />
+        }
+
+        @for (node of nodes; track trackNode($index)) {
+          <circle
+            [attr.cx]="node.x"
+            [attr.cy]="node.y"
+            [attr.r]="node.radius + 4"
+            [attr.fill]="config().accentColor"
+            fill-opacity="0.08"
+          />
+
+          <circle
+            [attr.cx]="node.x"
+            [attr.cy]="node.y"
+            [attr.r]="node.radius"
+            [attr.fill]="config().accentColor"]
+            [attr.fill-opacity]="node.primary ? '0.65' : '0.32'"
+            fill-opacity="0.75"
+          />
+
+          @if (config().showNetworkIcons && node.icon) {
+            <svg:g renderTechnologyLogo 
+              [type]="node.icon" 
+              [x]="node.x" 
+              [y]="node.y" 
+              [color]="config().accentColor">
+            </svg:g>
+            <!-- {{ renderSubtleNetworkIcon(node.icon, node.x, node.y, config().accentColor) }} -->
+            <!-- <text
+              [attr.x]="node.x"
+              [attr.y]="node.y - 9"
+              text-anchor="middle"
+              font-size="8"
+              [attr.fill]="config().accentColor"
+              fill-opacity="0.75"
+            >
+              {{ node.icon }}
+            </text> -->
+          }
+        }
+      </g>
+    }
+
+    <!-- Hex topology -->
+    @if (config().networkStyle === 'hex-topology') {
+      <g [attr.opacity]="config().networkOpacity">
+        @for (hex of hexagons; track $index) {
+          <polygon
+            [attr.points]="
+              hexagonPoints(hex.x, hex.y, hex.size)
+            "
+            fill="none"
+            [attr.stroke]="config().accentColor"
+            stroke-width="1"
+            [attr.stroke-opacity]="hex.opacity + 0.15"
+          />
+
+          <circle
+            [attr.cx]="hex.x"
+            [attr.cy]="hex.y"
+            r="2"
+            [attr.fill]="config().accentColor"
+            [attr.fill-opacity]="hex.opacity + 0.15"
+          />
+        }
+      </g>
+    }
+
+    <!-- Circuit flow -->
+    @if (config().networkStyle === 'circuit-flow') {
+      <g
+        fill="none"
+        [attr.opacity]="config().networkOpacity"
+        [attr.stroke]="config().accentColor"
+      >
+        @for (line of circuitLines; track $index) {
+          <polyline
+            [attr.points]="line.points"
+            stroke-width="1.2"
+            [attr.stroke-opacity]="line.opacity"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            [attr.transform]="'translate(' + (850 + $index * 110) + ',40)'"
+          />
+
+          <circle
+            [attr.cx]="850 + $index * 110 + 450"
+            [attr.cy]="line.points.includes('290') ? 330 : 140"
+            r="3"
+            [attr.fill]="config().accentColor"
+          />
+        }
+      </g>
+    }
+
+    <!-- Editorial accent -->
+    @if (isEditorial()) {
+      <rect
+        x="54"
+        y="88"
+        width="4"
+        height="205"
+        rx="2"
+        [attr.fill]="config().accentColor"
+      />
+
+      <rect
+        x="72"
+        y="90"
+        width="1"
+        height="200"
+        [attr.fill]="config().accentColor"
+        opacity="0.25"
+      />
+    }
+
+    <!-- Name -->
+    <text
+      class="banner-name"
+      [attr.x]="nameX()"
+      [attr.y]="nameY()"
+      [attr.text-anchor]="textAnchor()"
+      [attr.font-family]="fontFamilyCss()"
+      [attr.font-size]="config().nameFontSize"
+      font-weight="700"
+      [attr.fill]="config().accentColor"
+    >
+      {{ config().fullName }}
+    </text>
+
+    <!-- Role -->
+    <text
+      class="banner-role"
+      [attr.x]="nameX()"
+      [attr.y]="roleY()"
+      [attr.text-anchor]="textAnchor()"
+      [attr.font-family]="fontFamilyCss()"
+      [attr.font-size]="config().roleFontSize"
+      fill="#ffffff"
+      fill-opacity="0.92"
+    >
+      {{ config().roleTitle }}
+    </text>
+
+    <!-- Tagline -->
+    @if (config().showTagline && config().tagline) {
+      <text
+        class="banner-tagline"
+        [attr.x]="nameX()"
+        [attr.y]="taglineY()"
+        [attr.text-anchor]="textAnchor()"
+        [attr.font-family]="fontFamilyCss()"
+        font-size="16"
+        fill="#ffffff"
+        fill-opacity="0.68"
+      >
+        {{ config().tagline }}
+      </text>
+    }
+
+    <!-- Text divider -->
+    <line
+      [attr.x1]="isCentered() ? 742 : nameX()"
+      [attr.x2]="isCentered() ? 842 : nameX() + 100"
+      [attr.y1]="config().showTagline ? 298 : 290"
+      [attr.y2]="config().showTagline ? 298 : 290"
+      [attr.stroke]="config().accentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      opacity="0.85"
+    />
+
+    <!-- Technology badges -->
+    <g class="tech-badges">
+      @for (tech of badgeItems(); track trackTech($index, tech); let i = $index) {
+        <g
+          [attr.transform]="
+            'translate(' +
+            (getBadgeX(i, badgeItems().length)) +
+            ',' +
+            getBadgeY() +
+            ')'
+          "
+        >
+          @if (config().logoBadgeStyle === 'glass-pill') {
+            <rect
+              x="0"
+              y="0"
+              [attr.width]="getBadgeWidth(tech)"
+              height="34"
+              rx="17"
+              fill="#ffffff"
+              fill-opacity="0.08"
+              stroke="#ffffff"
+              stroke-opacity="0.18"
+            />
+
+            <circle
+              cx="17"
+              cy="17"
+              r="7"
+              [attr.fill]="techColor(tech)"
+              fill-opacity="0.95"
+            />
+
+            <text
+              x="17"
+              y="20"
+              text-anchor="middle"
+              font-size="7"
+              font-weight="700"
+              fill="#ffffff"
+            >
+              {{ techInitials(tech.name) }}
+            </text>
+
+            <text
+              x="31"
+              y="21"
+              font-size="12"
+              font-weight="500"
+              fill="#ffffff"
+            >
+              {{ tech.name }}
+            </text>
+          }
+
+          @if (config().logoBadgeStyle === 'minimal-clean') {
+            <g>
+              <circle
+                cx="8"
+                cy="14"
+                r="4"
+                [attr.fill]="techColor(tech)"
+              />
+
+              <text
+                x="19"
+                y="18"
+                font-size="12"
+                font-weight="500"
+                fill="#ffffff"
+              >
+                {{ tech.name }}
+              </text>
+            </g>
+          }
+
+          @if (config().logoBadgeStyle === 'icon-above') {
+            <g>
+              <rect
+                x="0"
+                y="0"
+                [attr.width]="getBadgeWidth(tech)"
+                height="62"
+                rx="10"
+                fill="#ffffff"
+                fill-opacity="0.055"
+                stroke="#ffffff"
+                stroke-opacity="0.13"
+              />
+
+              <circle
+                [attr.cx]="getBadgeWidth(tech) / 2"
+                cy="21"
+                r="11"
+                [attr.fill]="techColor(tech)"
+                fill-opacity="0.2"
+                [attr.stroke]="techColor(tech)"
+                stroke-opacity="0.7"
+              />
+
+              <text
+                [attr.x]="getBadgeWidth(tech) / 2"
+                y="24"
+                text-anchor="middle"
+                font-size="9"
+                font-weight="700"
+                [attr.fill]="techColor(tech)"
+              >
+                {{ techInitials(tech.name) }}
+              </text>
+
+              <text
+                [attr.x]="getBadgeWidth(tech) / 2"
+                y="48"
+                text-anchor="middle"
+                font-size="10"
+                font-weight="500"
+                fill="#ffffff"
+              >
+                {{ tech.name }}
+              </text>
+            </g>
+          }
+        </g>
+      }
+    </g>
+  </g>
+</svg>
+
+    
+    <!--<g transform={`translate(${x - 14}, ${y - 14})`} opacity="0.85">
+      <circle
+        cx="14"
+        cy="14"
+        r="15"
+        fill="#042821"
+        stroke={color}
+        strokeWidth="1.2"
+        strokeOpacity="0.55"
+      />
+      {type === 'server' && (
+        <g stroke={color} strokeWidth="1.3" fill="none" transform="translate(6, 6)">
+          <rect x="1" y="1" width="14" height="5" rx="1.2" />
+          <rect x="1" y="9" width="14" height="5" rx="1.2" />
+          <circle cx="4" cy="3.5" r="0.8" fill={color} />
+          <circle cx="4" cy="11.5" r="0.8" fill={color} />
+          <line x1="8" y1="3.5" x2="12" y2="3.5" />
+          <line x1="8" y1="11.5" x2="12" y2="11.5" />
+        </g>
+      )}
+      {type === 'db' && (
+        <g stroke={color} strokeWidth="1.3" fill="none" transform="translate(6, 5)">
+          <ellipse cx="8" cy="3.5" rx="6" ry="2.3" />
+          <path d="M2 3.5V9C2 10.3 4.7 11.3 8 11.3C11.3 11.3 14 10.3 14 9V3.5" />
+          <path d="M2 9V14C2 15.3 4.7 16.3 8 16.3C11.3 16.3 14 15.3 14 14V9" />
+        </g>
+      )}
+      {type === 'code' && (
+        <g stroke={color} strokeWidth="1.4" fill="none" strokeLinecap="round" strokeLinejoin="round" transform="translate(6, 6)">
+          <polyline points="4.5 4 1 8 4.5 12" />
+          <polyline points="11.5 4 15 8 11.5 12" />
+          <line x1="9.2" y1="2.5" x2="6.8" y2="13.5" />
+        </g>
+      )}
+      {type === 'git' && (
+        <g stroke={color} strokeWidth="1.3" fill="none" strokeLinecap="round" transform="translate(6, 6)">
+          <circle cx="4" cy="3.5" r="2" />
+          <circle cx="4" cy="12.5" r="2" />
+          <circle cx="12" cy="6.5" r="2" />
+          <line x1="4" y1="5.5" x2="4" y2="10.5" />
+          <path d="M12 8.5C12 10.5 9.5 11 4 10.5" />
+        </g>
+      )}
+      {type === 'cloud' && (
+        <g stroke={color} strokeWidth="1.3" fill="none" strokeLinecap="round" transform="translate(5, 6)">
+          <path d="M4.5 12.5H13.5C15.4 12.5 17 11 17 9.1C17 7.3 15.6 5.9 13.9 5.7C13.3 3.3 11.1 1.5 8.5 1.5C5.5 1.5 3 3.9 3 6.9C1.6 7.3 0.6 8.6 0.6 10.1C0.6 11.5 2.3 12.5 4.5 12.5Z" />
+        </g>
+      )}
+      {type === 'api' && (
+        <g stroke={color} strokeWidth="1.3" fill="none" strokeLinecap="round" transform="translate(6, 6)">
+          <polygon points="8 1 14.5 4.8 14.5 11.2 8 15 1.5 11.2 1.5 4.8" />
+          <circle cx="8" cy="8" r="2.2" />
+        </g>
+      )}
+      {type === 'node' && (
+        <g stroke={color} strokeWidth="1.3" fill="none" transform="translate(6, 6)">
+          <circle cx="8" cy="8" r="3" fill={color} fillOpacity="0.3" />
+          <circle cx="8" cy="8" r="6.5" strokeDasharray="2 2" />
+        </g>
+      )}
+    </g>-->

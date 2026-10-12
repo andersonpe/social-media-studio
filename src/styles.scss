@@ -1,1 +1,39 @@
-/* You can add global styles to this file, and also import other style files */
+// @import url(./estilos/reset.css);
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --font-display: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+    --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    background-color: #070d0b;
+    color: #f1f5f9;
+  }
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+
+.net-btn-active {
+  border-color: #34d399;
+  background-color: rgb(52 211 153 / 10%);
+  color: #34d399;
+}
+
+.net-btn-inactive {
+  border-color: #374151;
+  background-color: transparent;
+  color: #9ca3af;
+}
+
+.net-btn-inactive:hover {
+  border-color: #6b7280;
+  color: #d1d5db;
+}
+

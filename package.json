@@ -1,6 +1,6 @@
 {
   "name": "social-media-studio",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -17,6 +17,15 @@
     "@angular/forms": "^22.1.0",
     "@angular/platform-browser": "^22.1.0",
     "@angular/router": "^22.1.0",
+    "@imgly/background-removal": "^1.7.0",
+    "@lucide/angular": "^1.55.0",
+    "@ng-icons/core": "^36.1.0",
+    "@ng-icons/lucide": "^36.1.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "fabric": "^7.4.0",
+    "ngx-image-cropper": "^9.1.7",
+    "onnxruntime-web": "^1.21.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0"
   },
@@ -24,8 +33,12 @@
     "@angular/build": "^22.1.8",
     "@angular/cli": "^22.1.8",
     "@angular/compiler-cli": "^22.1.0",
+    "@tailwindcss/postcss": "^4.3.3",
+    "autoprefixer": "^10.6.1",
     "jsdom": "^28.0.0",
+    "postcss": "^8.5.29",
     "prettier": "^3.8.1",
+    "tailwindcss": "^4.3.3",
     "typescript": "~6.0.2",
     "vitest": "^4.0.8"
   }

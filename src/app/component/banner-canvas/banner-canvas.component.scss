@@ -1,0 +1,48 @@
+
+:host {
+  display: block;
+  width: 100%;
+  min-width: 0;
+}
+
+.banner-canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1584 / 396;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.banner-name,
+.banner-role,
+.banner-tagline {
+  dominant-baseline: auto;
+}
+
+.banner-name {
+  letter-spacing: -1.2px;
+}
+
+.banner-role {
+  letter-spacing: 0.15px;
+}
+
+.banner-tagline {
+  letter-spacing: 0.2px;
+}
+
+.network {
+  pointer-events: none;
+}
+
+.tech-badges {
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .banner-canvas * {
+    animation: none !important;
+    transition: none !important;
+  }
+}

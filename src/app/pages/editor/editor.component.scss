@@ -1,0 +1,187 @@
+/* Container Principal */
+.container {
+  max-width: 800px;
+  margin: 30px auto;
+  padding: 25px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  color: #333333;
+}
+
+h2 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-size: 24px;
+  font-weight: 600;
+  color: #1a1a1a;
+  border-bottom: 2px solid #f0f2f5;
+  padding-bottom: 10px;
+}
+
+/* Área de Upload Customizada */
+input[type="file"] {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  background: #f8f9fa;
+  border: 2px dashed #ced4da;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-bottom: 15px;
+}
+
+input[type="file"]:hover {
+  background: #e9ecef;
+  border-color: #007bff;
+}
+
+/* Mensagem de Loading / Processamento */
+.loading-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 15px;
+  background-color: #e8f0fe;
+  border-left: 4px solid #1a73e8;
+  border-radius: 4px;
+  color: #1967d2;
+  font-weight: 500;
+  margin: 15px 0;
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+/* Barra de Ferramentas / Ações */
+.toolbar {
+  margin: 25px 0 15px 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+}
+
+.toolbar label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #495057;
+}
+
+/* Botões de Seleção de Cor */
+.btn-color {
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  background-color: #ffffff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-color:hover {
+  background-color: #e9ecef;
+  border-color: #adb5bd;
+  transform: translateY(-1px);
+}
+
+.btn-color:active {
+  transform: translateY(0);
+}
+
+/* Botão de Exportar / Salvar */
+.btn-save {
+  margin-left: auto;
+  background-color: #28a745;
+  color: #ffffff;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(40, 167, 69, 0.2);
+  transition: all 0.2s ease;
+}
+
+.btn-save:hover {
+  background-color: #218838;
+  box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+  transform: translateY(-1px);
+}
+
+/* Container do Editor / Cropper */
+.cropper-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 400px; /* Tamanho confortável para trabalhar o corte */
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-top: 15px;
+  background-image: linear-gradient(45deg, #f0f0f0 25%, transparent 25%),
+                    linear-gradient(-45deg, #f0f0f0 25%, transparent 25%),
+                    linear-gradient(45deg, transparent 75%, #f0f0f0 75%),
+                    linear-gradient(-45deg, transparent 75%, #f0f0f0 75%);
+  background-size: 16px 16px;
+  background-position: 0 0, 0 8px, 8px -8px, -8px 0px;
+}
+
+/* Customização interna para alinhar o Cropper centralizado */
+image-cropper {
+  display: block;
+  max-height: 480px;
+  margin: 0 auto;
+}
+
+/* Animação de Pulse para o Loading */
+@keyframes pulse {
+  0% { opacity: 0.6; }
+  50% { opacity: 1; }
+  100% { opacity: 0.6; }
+}
+
+/* Responsividade para telas menores */
+@media (max-width: 576px) {
+  .toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .btn-save {
+    margin-left: 0;
+    width: 100%;
+    text-align: center;
+  }
+}
+
+.preview-container {
+  width: 200px;
+  height: 200px;
+  margin-top: 20px;
+  border: 2px solid #007bff;
+  border-radius: 8px; /* Mude para 50% se quiser um preview circular */
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  transition: background-color 0.25s ease;
+  
+  /* Grid de fundo para transparência */
+  background-image: linear-gradient(45deg, #f0f0f0 25%, transparent 25%),
+                    linear-gradient(-45deg, #f0f0f0 25%, transparent 25%),
+                    linear-gradient(45deg, transparent 75%, #f0f0f0 75%),
+                    linear-gradient(-45deg, transparent 75%, #f0f0f0 75%);
+  background-size: 10px 10px;
+}
+
+.preview-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Garante que a imagem preencha os 200x200 perfeitamente */
+}

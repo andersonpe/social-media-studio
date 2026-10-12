@@ -1,0 +1,824 @@
+<!-- 
+<div class="min-h-screen bg-[#070d0b] text-slate-100 flex flex-col">
+
+  <!-- Header --
+  <header
+    class="flex items-center justify-between px-6 lg:px-10 py-4 border-b border-emerald-950/80 bg-[#070d0b]/95 sticky top-0 z-30 backdrop-blur-md">
+
+    <a
+      (click)="setViewMode($event, 'banner-only')"
+      class="text-lg font-bold tracking-tight text-white whitespace-nowrap"
+      style="font-family: 'Outfit', sans-serif">
+      LinkedIn Banner Studio
+    </a>
+
+    <nav class="hidden md:flex items-center gap-7 text-sm font-medium text-slate-400">
+
+      <button
+        type="button"
+        (click)="setViewMode($event, 'banner-only')"
+        class="hover:text-white transition-colors whitespace-nowrap pb-0.5"
+        [ngClass]="viewMode() === 'banner-only'
+          ? 'text-emerald-400 border-b border-emerald-400'
+          : ''">
+        Canvas 1584×396
+      </button>
+
+      <button
+        type="button"
+        (click)="setViewMode($event, 'safe-zone')"
+        class="hover:text-white transition-colors whitespace-nowrap pb-0.5"
+        [ngClass]="viewMode() === 'safe-zone'
+          ? 'text-emerald-400 border-b border-emerald-400'
+          : ''">
+        Guia Safe-Zone
+      </button>
+
+      <button
+        type="button"
+        (click)="setViewMode($event, 'linkedin-mockup')"
+        class="hover:text-white transition-colors whitespace-nowrap pb-0.5"
+        [ngClass]="viewMode() === 'linkedin-mockup'
+          ? 'text-emerald-400 border-b border-emerald-400'
+          : ''">
+        Simular Perfil LinkedIn
+      </button>
+
+      <button
+        type="button"
+        (click)="handleReset()"
+        class="hover:text-white transition-colors whitespace-nowrap">
+        Restaurar Padrão
+      </button>
+    </nav>
+
+    <div class="flex items-center gap-3">
+
+      <button
+        type="button"
+        (click)="handleCopyClipboard()"
+        class="px-3.5 py-2 text-xs font-medium text-slate-200 bg-emerald-950/60 border border-emerald-800/60 rounded-lg hover:bg-emerald-900/60 transition-colors whitespace-nowrap flex items-center gap-2 cursor-pointer">
+
+        @if (copiedSuccess()) {
+          <svg lucideCheck class="w-3.5 h-3.5 text-emerald-400"></svg>
+          <span>Copiado</span>
+        } @else {
+          <svg lucideCopy class="w-3.5 h-3.5 text-emerald-400"></svg>
+          <span>Copiar PNG</span>
+        }
+      </button>
+
+      <button
+        type="button"
+        (click)="handleDownloadPng(1)"
+        [disabled]="isExporting()"
+        class="px-4 py-2 text-xs font-semibold text-[#04241d] bg-emerald-400 hover:bg-emerald-300 rounded-lg transition-colors whitespace-nowrap flex items-center gap-2 shadow-sm cursor-pointer disabled:opacity-50">
+
+        <svg lucideDownload class="w-3.5 h-3.5"></svg>
+        <span>Baixar PNG (1584×396)</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main --
+  <main class="flex-1 max-w-[1440px] w-full mx-auto px-6 lg:px-10 py-8 space-y-8">
+
+    <!-- Title and actions --
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+
+      <div>
+        <div class="flex items-center gap-2 text-xs text-emerald-400/90 font-mono tabular-nums mb-1.5">
+          <span>1584 × 396 PX</span>
+          <span aria-hidden="true">·</span>
+          <span>PROPORÇÃO 4:1 OFICIAL</span>
+          <span aria-hidden="true">·</span>
+          <span>HEX {{ config().bgColor.toUpperCase() }}</span>
+        </div>
+
+        <h1
+          class="text-2xl sm:text-3xl font-bold text-white tracking-tight"
+          style="font-family: 'Outfit', sans-serif; text-wrap: balance">
+          Banner Profissional — Anderson Pereira da Silva
+        </h1>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-2">
+
+        <div class="flex items-center gap-1 p-1 bg-[#0d1714] border border-emerald-950 rounded-lg">
+          <button
+            type="button"
+            (click)="setViewMode($event, 'banner-only')"
+            class="px-3 py-1.5 text-xs font-medium rounded-md transition-colors whitespace-nowrap cursor-pointer"
+            [ngClass]="viewMode() === 'banner-only'
+              ? 'bg-[#06392f] text-white shadow-sm'
+              : 'text-slate-400 hover:text-slate-200'">
+            Banner Puro
+          </button>
+
+          <button
+            type="button"
+            (click)="setViewMode($event, 'safe-zone')"
+            class="px-3 py-1.5 text-xs font-medium rounded-md transition-colors whitespace-nowrap cursor-pointer"
+            [ngClass]="viewMode() === 'safe-zone'
+              ? 'bg-[#06392f] text-white shadow-sm'
+              : 'text-slate-400 hover:text-slate-200'">
+            Área da Foto (Safe Zone)
+          </button>
+
+          <button
+            type="button"
+            (click)="setViewMode($event, 'linkedin-mockup')"
+            class="px-3 py-1.5 text-xs font-medium rounded-md transition-colors whitespace-nowrap cursor-pointer"
+            [ngClass]="viewMode() === 'linkedin-mockup'
+              ? 'bg-[#06392f] text-white shadow-sm'
+              : 'text-slate-400 hover:text-slate-200'">
+            Preview no LinkedIn
+          </button>
+        </div>
+
+        <button
+          type="button"
+          (click)="handleDownloadPng(2)"
+          [disabled]="isExporting()"
+          class="px-3 py-2 text-xs font-medium text-emerald-300 bg-[#0d1714] border border-emerald-900/70 hover:border-emerald-600/70 rounded-lg transition-colors whitespace-nowrap flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+          title="Exportar em resolução 2x Retina (3168 × 792 px)">
+
+          <svg lucideSparkles class="w-3.5 h-3.5 text-emerald-400"></svg>
+          <span>PNG 2x (3168×792)</span>
+        </button>
+
+        <button
+          type="button"
+          (click)="handleDownloadSvg()"
+          class="px-3 py-2 text-xs font-medium text-slate-300 bg-[#0d1714] border border-emerald-950 hover:border-emerald-800 rounded-lg transition-colors whitespace-nowrap flex items-center gap-1.5 cursor-pointer">
+
+          <svg lucideSparkles class="w-3.5 h-3.5 text-slate-400"></svg>
+          <span>Baixar SVG</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Export notification --
+    @if (exportNotice()) {
+      <div class="px-4 py-2.5 rounded-lg bg-emerald-950/90 border border-emerald-700/60 text-emerald-200 text-xs font-medium flex items-center justify-between">
+        <span>{{ exportNotice() }}</span>
+
+        <button
+          type="button"
+          (click)="exportNotice.set(null)"
+          class="text-emerald-400 hover:text-white text-xs ml-4">
+          Fechar
+        </button>
+      </div>
+    }
+
+    <!-- Canvas stage --
+    <section class="rounded-xl border border-emerald-950/90 bg-[#0b1411] p-4 sm:p-6 shadow-2xl">
+
+      @if (viewMode() !== 'linkedin-mockup') {
+
+        <div class="relative w-full overflow-hidden rounded-lg border border-emerald-900/40 shadow-inner bg-[#06392f]">
+
+          <app-banner-canvas [config]="config()" />
+
+          <!-- Safe zone overlay --
+          @if (viewMode() === 'safe-zone') {
+            <div class="absolute inset-0 pointer-events-none">
+
+              <div
+                class="absolute bottom-[-18%] left-[4.5%] w-[16.5%] aspect-square rounded-full border-2 border-dashed border-amber-400/90 bg-amber-950/45 flex flex-col items-center justify-center text-center p-2 backdrop-blur-[2px]">
+
+                <span class="text-[10px] sm:text-xs font-mono font-semibold text-amber-200 leading-tight">
+                  Foto do Perfil LinkedIn
+                </span>
+              </div>
+
+              <div class="absolute top-3 left-3 px-2.5 py-1 rounded bg-black/65 text-[11px] font-mono text-emerald-300 tabular-nums">
+                Área Segura Verificada · 1584 × 396 px
+              </div>
+            </div>
+          }
+        </div>
+
+      } @else {
+
+        <!-- LinkedIn profile mockup --
+        <div class="max-w-[1128px] mx-auto rounded-xl overflow-hidden border border-slate-800 bg-[#1b1f23] shadow-xl">
+
+          <div class="relative w-full">
+
+            <app-banner-canvas [config]="config()" />
+
+            <!-- Simulated avatar --
+            <div class="absolute -bottom-12 sm:-bottom-16 left-6 sm:left-8 w-24 h-24 sm:w-36 sm:h-36 rounded-full border-4 border-[#1b1f23] bg-gradient-to-br from-[#06392f] to-[#021c17] flex items-center justify-center shadow-lg">
+
+              <div class="text-center">
+                <span
+                  class="text-2xl sm:text-4xl font-bold text-emerald-300 tracking-tight"
+                  style="font-family: 'Outfit', sans-serif">
+                  AP
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Simulated profile body --
+          <div class="pt-14 sm:pt-20 pb-6 px-6 sm:px-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-left">
+
+            <div>
+              <h2 class="text-xl sm:text-2xl font-bold text-white">
+                {{ config().fullName || 'Anderson Pereira da Silva' }}
+              </h2>
+
+              <p class="text-sm text-slate-300 mt-0.5">
+                {{ config().roleTitle || 'Desenvolvedor de Software' }}
+                · Angular | React.js | PHP | .NET | PostgreSQL | Oracle | SQL Server
+              </p>
+
+              <div class="flex items-center gap-2 text-xs text-slate-400 mt-2">
+                <span>Brasil</span>
+                <span aria-hidden="true">·</span>
+                <span class="text-emerald-400 font-medium">Informações de contato</span>
+                <span aria-hidden="true">·</span>
+                <span>+500 conexões</span>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-2.5 self-start sm:self-center">
+              <span class="px-4 py-1.5 rounded-full bg-[#0a66c2] text-white text-xs font-semibold">
+                Tenho interesse em...
+              </span>
+
+              <span class="px-4 py-1.5 rounded-full border border-emerald-400/60 text-emerald-300 text-xs font-semibold">
+                Adicionar seção
+              </span>
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- Canvas footer --
+      <div class="mt-4 pt-4 border-t border-emerald-950/80 flex flex-wrap items-center justify-between gap-4 text-xs text-slate-400">
+
+        <div class="flex flex-wrap items-center gap-2">
+          <span>
+            Dimensão exata:
+            <strong class="text-slate-200 font-mono tabular-nums">
+              1584 × 396 px
+            </strong>
+          </span>
+
+          <span aria-hidden="true">·</span>
+
+          <span>
+            Cor base:
+            <strong class="text-emerald-300 font-mono">
+              {{ config().bgColor }}
+            </strong>
+          </span>
+
+          <span aria-hidden="true">·</span>
+
+          <span>
+            Logos ativos:
+            <strong class="text-slate-200">
+              {{ activeTechNames() }}
+            </strong>
+          </span>
+        </div>
+
+        <div class="flex items-center gap-4">
+          <button
+            type="button"
+            (click)="handleDownloadPng(1)"
+            [disabled]="isExporting()"
+            class="text-emerald-400 hover:text-emerald-300 font-semibold flex items-center gap-1.5 cursor-pointer disabled:opacity-50">
+
+            <svg lucideDownload class="w-3.5 h-3.5"></svg>
+            <span>Download Direto 1584×396 PNG</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Customization area --
+    <section class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+
+      <!-- Left navigation --
+      <div class="lg:col-span-4 rounded-xl border border-emerald-950 bg-[#0b1411] p-5 space-y-5">
+
+        <div>
+          <h2 class="text-base font-semibold text-white">
+            Personalização do Estúdio
+          </h2>
+
+          <p class="text-xs text-slate-400 mt-1">
+            Ajuste o posicionamento, a malha de rede, tipografia ou estilo dos logos antes de exportar.
+          </p>
+        </div>
+
+        <div class="flex flex-col gap-1.5">
+
+          <button
+            type="button"
+            (click)="activeTab.set('layout')"
+            class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-lg text-xs font-medium transition-colors cursor-pointer"
+            [ngClass]="activeTab() === 'layout'
+              ? 'bg-[#06392f] text-white'
+              : 'text-slate-400 hover:text-slate-200 hover:bg-emerald-950/40'">
+
+            <span class="flex items-center gap-2.5">
+              <svg lucideLayout class="w-4 h-4 text-emerald-400"></svg>
+              <span>01. Layout &amp; Rede Minimalista</span>
+            </span>
+
+            <span class="font-mono text-[11px] opacity-75">Malha</span>
+          </button>
+
+          <button
+            type="button"
+            (click)="activeTab.set('stack')"
+            class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-lg text-xs font-medium transition-colors cursor-pointer"
+            [ngClass]="activeTab() === 'stack'
+              ? 'bg-[#06392f] text-white'
+              : 'text-slate-400 hover:text-slate-200 hover:bg-emerald-950/40'">
+
+            <span class="flex items-center gap-2.5">
+              <svg lucideLayers class="w-4 h-4 text-emerald-400"></svg>
+              <span>02. Logos &amp; Tecnologias ({{ config().techStack.length }})</span>
+            </span>
+
+            <span class="font-mono text-[11px] opacity-75 tabular-nums">
+              {{ enabledTechCount() }}/{{ config().techStack.length }}
+            </span>
+          </button>
+
+          <button
+            type="button"
+            (click)="activeTab.set('typography')"
+            class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-lg text-xs font-medium transition-colors cursor-pointer"
+            [ngClass]="activeTab() === 'typography'
+              ? 'bg-[#06392f] text-white'
+              : 'text-slate-400 hover:text-slate-200 hover:bg-emerald-950/40'">
+
+            <span class="flex items-center gap-2.5">
+              <svg lucideType class="w-4 h-4 text-emerald-400"></svg>
+              <span>03. Textos, Fontes &amp; Cores</span>
+            </span>
+
+            <span class="font-mono text-[11px] opacity-75">
+              {{ config().fontFamily }}
+            </span>
+          </button>
+        </div>
+
+        <!-- Checklist --
+        <div class="pt-4 border-t border-emerald-950/80 space-y-2.5 text-xs text-slate-400">
+
+          <div class="font-medium text-slate-300">
+            Checklist do Briefing
+          </div>
+
+          <div class="flex items-center justify-between">
+            <span>Resolução nativa</span>
+            <span class="font-mono text-emerald-400 tabular-nums">1584 × 396 px</span>
+          </div>
+
+          <div class="flex items-center justify-between">
+            <span>Cor principal solicitada</span>
+            <span class="font-mono text-emerald-400">#06392f</span>
+          </div>
+
+          <div class="flex items-center justify-between">
+            <span>Elementos visuais</span>
+            <span class="text-slate-200">Ícones sutis de rede</span>
+          </div>
+
+          <div class="flex items-center justify-between">
+            <span>Contraste WCAG AA</span>
+            <span class="font-mono text-emerald-400 tabular-nums">12.4 : 1</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right controls --
+      <div class="lg:col-span-8 rounded-xl border border-emerald-950 bg-[#0b1411] p-6">
+
+        <!-- Layout tab --
+        @if (activeTab() === 'layout') {
+
+          <div class="space-y-6">
+
+            <div>
+              <h3 class="text-sm font-semibold text-white mb-1">
+                Alinhamento e Composição Espacial
+              </h3>
+
+              <p class="text-xs text-slate-400 mb-3.5">
+                Escolha como o nome e os logos se posicionam em relação à foto de perfil do LinkedIn.
+              </p>
+
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                @for (preset of presets; track preset.id) {
+                  <button
+                    type="button"
+                    (click)="setLayoutPreset(preset.id)"
+                    class="p-3.5 rounded-lg border text-left transition-colors cursor-pointer"
+                    [ngClass]="config().layoutPreset === preset.id
+                      ? 'bg-[#06392f]/70 border-emerald-400 text-white'
+                      : 'bg-[#070d0b] border-emerald-950 text-slate-300 hover:border-emerald-800'">
+
+                    <div class="text-xs font-semibold">
+                      {{ preset.title }}
+                    </div>
+
+                    <div class="text-[11px] text-slate-400 mt-1 leading-relaxed">
+                      {{ preset.desc }}
+                    </div>
+                  </button>
+                }
+              </div>
+            </div>
+
+            <div class="pt-5 border-t border-emerald-950/80">
+
+              <h3 class="text-sm font-semibold text-white mb-1">
+                Estilo dos Elementos Sutis de Rede
+              </h3>
+
+              <p class="text-xs text-slate-400 mb-3.5">
+                Selecione o desenho geométrico de rede e infraestrutura sobre o fundo.
+              </p>
+
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                @for (net of networks; track net.id) {
+                  <button
+                    type="button"
+                    (click)="setNetworkStyle(net.id)"
+                    class="p-3.5 rounded-lg border text-left transition-colors cursor-pointer"
+                    [ngClass]="config().networkStyle === net.id
+                      ? 'net-btn-active'
+                      : 'net-btn-inactive'">
+
+                    <div class="text-xs font-semibold">
+                      {{ net.title }}
+                    </div>
+
+                    <div class="text-[11px] text-slate-400 mt-1 leading-relaxed">
+                      {{ net.desc }}
+                    </div>
+                  </button>
+                }
+              </div>
+            </div>
+
+            <div class="pt-5 border-t border-emerald-950/80 grid grid-cols-1 sm:grid-cols-2 gap-6">
+
+              <div>
+                <div class="flex items-center justify-between text-xs mb-2">
+                  <span class="font-medium text-slate-200">
+                    Intensidade da Malha de Rede
+                  </span>
+
+                  <span class="font-mono text-emerald-400 tabular-nums">
+                    {{ getOpacityPercentage() }}%
+                  </span>
+                </div>
+
+                <input
+                  type="range"
+                  min="0.15"
+                  max="1"
+                  step="0.05"
+                  [value]="config().networkOpacity"
+                  (input)="updateOpacity($event)"
+                  class="w-full accent-emerald-400 cursor-pointer" />
+              </div>
+
+              <div class="flex flex-col justify-center gap-3">
+
+                <label class="flex items-center gap-2.5 text-xs text-slate-200 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    [checked]="config().showNetworkIcons"
+                    (change)="toggleExibirIcones($event)"
+                    class="rounded accent-emerald-400 w-4 h-4" />
+
+                  <span>
+                    Exibir ícones sutis de rede (Servidor, DB, Cloud, Git, API)
+                  </span>
+                </label>
+
+                <label class="flex items-center gap-2.5 text-xs text-slate-200 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    [checked]="config().showSubtleGrid"
+                    (change)="toggleExibirMicroGrid($event)"
+                    class="rounded accent-emerald-400 w-4 h-4" />
+
+                  <span>Exibir micro-grid arquitetural de fundo</span>
+                </label>
+              </div>
+            </div>
+          </div>
+        }
+
+        <!-- Technology stack tab --
+        @if (activeTab() === 'stack') {
+
+          <div class="space-y-6">
+
+            <div>
+              <h3 class="text-sm font-semibold text-white mb-1">
+                Apresentação dos Logos
+              </h3>
+
+              <p class="text-xs text-slate-400 mb-3.5">
+                Escolha o acabamento visual das insígnias tecnológicas para máxima legibilidade.
+              </p>
+
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                @for (estilo of estilos; track estilo.id) {
+                  <button
+                    type="button"
+                    (click)="setLogoBadgeStyle(estilo.id)"
+                    class="p-3.5 rounded-lg border text-left transition-colors cursor-pointer"
+                    [ngClass]="config().logoBadgeStyle === estilo.id
+                      ? 'bg-[#06392f]/70 border-emerald-400 text-white'
+                      : 'bg-[#070d0b] border-emerald-950 text-slate-300 hover:border-emerald-800'">
+
+                    <div class="text-xs font-semibold">
+                      {{ estilo.title }}
+                    </div>
+
+                    <div class="text-[11px] text-slate-400 mt-1 leading-relaxed">
+                      {{ estilo.desc }}
+                    </div>
+                  </button>
+                }
+              </div>
+            </div>
+
+            <div class="pt-4 border-t border-emerald-950/80 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+
+              <div>
+                <div class="text-xs font-semibold text-white">
+                  Paleta dos Ícones Tecnológicos
+                </div>
+
+                <div class="text-[11px] text-slate-400">
+                  Alterne entre as cores oficiais de cada marca ou acabamento monocromático.
+                </div>
+              </div>
+
+              <div class="flex items-center gap-1 p-1 bg-[#070d0b] border border-emerald-950 rounded-lg">
+
+                <button
+                  type="button"
+                  (click)="setMonochromeLogos(false)"
+                  class="px-3 py-1 text-xs font-medium rounded transition-colors cursor-pointer"
+                  [ngClass]="!config().monochromeLogos
+                    ? 'bg-[#06392f] text-white'
+                    : 'text-slate-400 hover:text-white'">
+                  Cores Oficiais
+                </button>
+
+                <button
+                  type="button"
+                  (click)="setMonochromeLogos(true)"
+                  class="px-3 py-1 text-xs font-medium rounded transition-colors cursor-pointer"
+                  [ngClass]="config().monochromeLogos
+                    ? 'bg-[#06392f] text-white'
+                    : 'text-slate-400 hover:text-white'">
+                  Monocromático
+                </button>
+              </div>
+            </div>
+
+            <!-- Technology list --
+            <div class="pt-4 border-t border-emerald-950/80">
+
+              <div class="text-xs font-semibold text-white mb-3">
+                Ordem e Visibilidade das Tecnologias
+              </div>
+
+              <div class="grid grid-cols-2 sm:grid-cols-4 xl:grid-cols-7 gap-2.5">
+
+                @for (tech of config().techStack; track tech.id; let idx = $index) {
+                  <div
+                    class="p-3 rounded-lg border flex flex-col items-center justify-between gap-2.5 transition-colors"
+                    [ngClass]="tech.enabled
+                      ? 'bg-[#070d0b] border-emerald-800/70'
+                      : 'bg-[#070d0b]/40 border-emerald-950/40 opacity-50'">
+
+                    <!-- Temporary logo fallback --
+                    <svg width="32" height="32" viewBox="0 0 48 48" aria-hidden="true">
+                      <circle
+                        cx="24"
+                        cy="24"
+                        r="22"
+                        [attr.fill]="config().monochromeLogos ? '#94a3b8' : (tech.brandColor || '#34d399')"
+                        fill-opacity="0.15" />
+
+                      <text
+                        x="24"
+                        y="29"
+                        text-anchor="middle"
+                        font-size="14"
+                        font-weight="700"
+                        [attr.fill]="config().monochromeLogos ? '#e2e8f0' : (tech.brandColor || '#34d399')">
+                        {{ techInitials(tech.name) }}
+                      </text>
+                    </svg>
+
+                    <span class="text-xs font-semibold text-white text-center">
+                      {{ tech.name }}
+                    </span>
+
+                    <div class="flex items-center gap-1.5 w-full justify-center pt-1 border-t border-emerald-950">
+
+                      <button
+                        type="button"
+                        (click)="moveTechItem(idx, -1)"
+                        [disabled]="idx === 0"
+                        class="px-1.5 py-0.5 text-[11px] text-slate-400 hover:text-white disabled:opacity-30 cursor-pointer"
+                        title="Mover para a esquerda">
+                        ←
+                      </button>
+
+                      <button
+                        type="button"
+                        (click)="toggleTechItem(tech.id)"
+                        class="px-2 py-0.5 rounded text-[10px] font-medium cursor-pointer"
+                        [ngClass]="tech.enabled
+                          ? 'bg-emerald-950 text-emerald-300'
+                          : 'bg-slate-800 text-slate-400'">
+                        {{ tech.enabled ? 'Ativo' : 'Oculto' }}
+                      </button>
+
+                      <button
+                        type="button"
+                        (click)="moveTechItem(idx, 1)"
+                        [disabled]="idx === config().techStack.length - 1"
+                        class="px-1.5 py-0.5 text-[11px] text-slate-400 hover:text-white disabled:opacity-30 cursor-pointer"
+                        title="Mover para a direita">
+                        →
+                      </button>
+                    </div>
+                  </div>
+                }
+              </div>
+            </div>
+          </div>
+        }
+
+        !-- Typography tab --
+        @if (activeTab() === 'typography') {
+
+          <div class="space-y-5">
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+              <div>
+                <label class="block text-xs font-medium text-slate-300 mb-1.5">
+                  Nome Principal
+                </label>
+
+                <input
+                  type="text"
+                  [value]="config().fullName"
+                  (input)="setFullName($any($event.target).value)"
+                  class="w-full px-3.5 py-2 rounded-lg bg-[#070d0b] border border-emerald-900/70 text-sm text-white focus:outline-none focus:border-emerald-400" />
+              </div>
+
+              <div>
+                <label class="block text-xs font-medium text-slate-300 mb-1.5">
+                  Subtítulo / Cargo Profissional
+                </label>
+
+                <input
+                  type="text"
+                  [value]="config().roleTitle"
+                  (input)="setRoleTitle($any($event.target).value)"
+                  class="w-full px-3.5 py-2 rounded-lg bg-[#070d0b] border border-emerald-900/70 text-sm text-white focus:outline-none focus:border-emerald-400" />
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
+
+              <div>
+                <label class="block text-xs font-medium text-slate-300 mb-1.5">
+                  Família Tipográfica Principal
+                </label>
+
+                <select
+                  [value]="config().fontFamily"
+                  (change)="setFontFamily($any($event.target).value)"
+                  class="w-full px-3 py-2 rounded-lg bg-[#070d0b] border border-emerald-900/70 text-xs text-white focus:outline-none focus:border-emerald-400">
+
+                  <option value="Outfit">Outfit (Geométrica Executiva)</option>
+                  <option value="Plus Jakarta Sans">Plus Jakarta Sans (Editorial Moderna)</option>
+                  <option value="Syne">Syne (Display Arquitetural)</option>
+                </select>
+              </div>
+
+              <div>
+                <div class="flex items-center justify-between text-xs mb-1.5">
+                  <span class="text-slate-300">Tamanho do Nome</span>
+
+                  <span class="font-mono text-emerald-400 tabular-nums">
+                    {{ config().nameFontSize }}px
+                  </span>
+                </div>
+
+                <input
+                  type="range"
+                  min="40"
+                  max="64"
+                  [value]="config().nameFontSize"
+                  (input)="setNameFontSize(+$any($event.target).value)"
+                  class="w-full accent-emerald-400 cursor-pointer" />
+              </div>
+
+              <div>
+                <div class="flex items-center justify-between text-xs mb-1.5">
+                  <span class="text-slate-300">Tamanho do Cargo</span>
+
+                  <span class="font-mono text-emerald-400 tabular-nums">
+                    {{ config().roleFontSize }}px
+                  </span>
+                </div>
+
+                <input
+                  type="range"
+                  min="18"
+                  max="32"
+                  [value]="config().roleFontSize"
+                  (input)="setRoleFontSize(+$any($event.target).value)"
+                  class="w-full accent-emerald-400 cursor-pointer" />
+              </div>
+            </div>
+
+            <div class="pt-4 border-t border-emerald-950/80 grid grid-cols-1 sm:grid-cols-2 gap-4 items-center">
+
+              <div>
+                <label class="block text-xs font-medium text-slate-300 mb-1.5">
+                  Cor de Fundo Principal
+                </label>
+
+                <div class="flex items-center gap-2.5">
+
+                  <input
+                    type="color"
+                    [value]="config().bgColor"
+                    (input)="setBgColor($any($event.target).value)"
+                    class="w-9 h-9 rounded cursor-pointer bg-transparent border border-emerald-800" />
+
+                  <input
+                    type="text"
+                    [value]="config().bgColor"
+                    (input)="setBgColor($any($event.target).value)"
+                    class="w-32 px-3 py-1.5 rounded-lg bg-[#070d0b] border border-emerald-900/70 font-mono text-xs text-white" />
+
+                  <button
+                    type="button"
+                    (click)="setBgColor('#06392f')"
+                    class="px-2.5 py-1.5 rounded bg-emerald-950/80 text-emerald-300 text-xs hover:bg-emerald-900 cursor-pointer">
+                    Fixar #06392f
+                  </button>
+                </div>
+              </div>
+
+              <div>
+                <label class="flex items-center gap-2 text-xs text-slate-200 cursor-pointer mb-1.5">
+
+                  <input
+                    type="checkbox"
+                    [checked]="config().showTagline"
+                    (change)="setShowTagline($any($event.target).checked)"
+                    class="rounded accent-emerald-400 w-4 h-4" />
+
+                  <span>Incluir linha de especialidade adicional</span>
+                </label>
+
+                @if (config().showTagline) {
+                  <input
+                    type="text"
+                    [value]="config().tagline"
+                    (input)="setTagline($any($event.target).value)"
+                    class="w-full px-3 py-1.5 rounded-lg bg-[#070d0b] border border-emerald-900/70 text-xs text-white" />
+                }
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer --
+  <footer class="mt-auto border-t border-emerald-950/60 py-5 px-6 lg:px-10 text-xs text-slate-500 flex flex-col sm:flex-row items-center justify-between gap-2 max-w-[1440px] w-full mx-auto">
+    <span>LinkedIn Banner Studio</span>
+    <span>Banner profissional · 1584 × 396 px</span>
+  </footer>
+</div> -->

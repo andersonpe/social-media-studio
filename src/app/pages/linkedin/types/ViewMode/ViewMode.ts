@@ -1,0 +1,1 @@
+export type ViewMode = 'banner-only' | 'linkedin-mockup' | 'safe-zone';
