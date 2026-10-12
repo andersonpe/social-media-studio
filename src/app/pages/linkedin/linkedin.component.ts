@@ -23,6 +23,7 @@ import { TechId } from '@/app/types/TechItem/TechItem';
 import { SubnavLinkedInComponent } from './components/subnav/subnav.component';
 import { SelectViewModeEventData } from './types/SelectViewModeEventData';
 import { BannerNetworkIconsComponent } from '@/app/pages/linkedin/components/technology-icons/technology-icons.component';
+import { LinkedInTabStackComponent } from './components/tabs/tab-stack/tab-stack.component';
 
 const DEFAULT_CONFIG: BannerConfig = {
   fullName: 'Anderson Pereira da Silva',
@@ -45,7 +46,7 @@ const DEFAULT_CONFIG: BannerConfig = {
 };
 
 @Component({
-  imports: [CommonModule, SubnavLinkedInComponent, BannerNetworkIconsComponent, LucideCheck, LucideFileCode, LucideDownload, LucideCopy, LucideDownload, LucideLayers, LucideLayout, LucideType, LucideSparkles, BannerCanvasComponent],
+  imports: [CommonModule, SubnavLinkedInComponent, BannerNetworkIconsComponent, LucideCheck, LucideFileCode, LucideDownload, LucideCopy, LucideDownload, LucideLayers, LucideLayout, LucideType, LucideSparkles, BannerCanvasComponent, LinkedInTabStackComponent],
   selector: 'apds-social-media-studio-linkedin',
   standalone: true,
   styleUrl: './linkedin.component.scss',
@@ -101,23 +102,7 @@ export class LinkedInComponent {
     },
   ];
 
-  readonly estilos: { id: LogoBadgeStyle; title: string; desc: string }[] = [
-    {
-      id: 'glass-pill',
-      title: 'Cards Translúcidos',
-      desc: 'Molduras de vidro sutil com ícone oficial em destaque e texto legível.',
-    },
-    {
-      id: 'minimal-clean',
-      title: 'Minimalista Circular',
-      desc: 'Ícones em medalhões escuros sem borda externa ao redor do nome.',
-    },
-    {
-      id: 'icon-above',
-      title: 'Bloco Vertical',
-      desc: 'Logos centralizados acima do nome de cada tecnologia.',
-    },
-  ];
+
 
 
   getOpacityPercentage(): number {
@@ -159,27 +144,6 @@ export class LinkedInComponent {
   setLayoutPreset(presetId: LayoutPreset) {
     this.config.update(prev => ({ ...prev, layoutPreset: presetId }))
   }
-
-  setLogoBadgeStyle(style: LogoBadgeStyle) {
-    this.config.update(prev => ({ ...prev, logoBadgeStyle: style }))
-  }
-
-  setMonochromeLogos(value: boolean) {
-    this.config.update(prev => ({ ...prev, monochromeLogos: value }))
-  }
-
-  moveTechItem = (index: number, direction: -1 | 1) => {
-    const targetIndex = index + direction;
-    if (targetIndex < 0 || targetIndex >= this.config().techStack.length) return;
-      this.config.update(prev => {
-        const list = [...prev.techStack];
-        const temp = list[index];
-        list[index] = list[targetIndex];
-        list[targetIndex] = temp;
-        return { ...prev, techStack: list };
-      });
-  };
-
 
   setViewModeEventHandler(event: SelectViewModeEventData) {
     event.event.preventDefault();
@@ -321,41 +285,6 @@ enabledTechCount(): number {
     .filter(tech => tech.enabled)
     .length;
 }
-
-techInitials(name: string): string {
-  const normalizedName = name.trim();
-
-  if (!normalizedName) {
-    return '';
-  }
-
-  const words = normalizedName
-    .split(/\s+/)
-    .filter(Boolean);
-
-  if (words.length === 1) {
-    return words[0].slice(0, 2).toUpperCase();
-  }
-
-  return (
-    words[0].charAt(0) +
-    words[words.length - 1].charAt(0)
-  ).toUpperCase();
-}
-
-  toggleTechItem = (id: TechId) => {
-    this.config.update(prev => {
-      const enabledCount = prev.techStack.filter((t) => t.enabled).length;
-      return {
-        ...prev,
-        techStack: prev.techStack.map((item) => {
-          if (item.id !== id) return item;
-          if (item.enabled && enabledCount <= 1) return item;
-          return { ...item, enabled: !item.enabled };
-        }),
-      };
-    });
-  };
 
   setFullName(value: string): void {
     this.config.update(current => ({
