@@ -1,0 +1,114 @@
+<div class="space-y-6">
+    <div>
+        <h3 class="text-sm font-semibold text-white mb-1">
+            Alinhamento e Composição Espacial
+        </h3>
+
+        <p class="text-xs text-slate-400 mb-3.5">
+            Escolha como o nome e os logos se posicionam em relação à foto de perfil do LinkedIn.
+        </p>
+
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        @for (preset of presets; track preset.id) {
+            <button
+                type="button"
+                (click)="setLayoutPreset(preset.id)"
+                class="p-3.5 rounded-lg border text-left transition-colors cursor-pointer"
+                [ngClass]="config().layoutPreset === preset.id
+                ? 'bg-[#06392f]/70 border-emerald-400 text-white'
+                : 'bg-[#070d0b] border-emerald-950 text-slate-300 hover:border-emerald-800'">
+
+                <div class="text-xs font-semibold">
+                {{ preset.title }}
+                </div>
+
+                <div class="text-[11px] text-slate-400 mt-1 leading-relaxed">
+                    {{ preset.desc }}
+                </div>
+            </button>
+        }
+        </div>
+    </div>
+
+    <div class="pt-5 border-t border-emerald-950/80">
+
+        <h3 class="text-sm font-semibold text-white mb-1">
+            Estilo dos Elementos Sutis de Rede
+        </h3>
+
+        <p class="text-xs text-slate-400 mb-3.5">
+            Selecione o desenho geométrico de rede e infraestrutura sobre o fundo.
+        </p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            @for (net of networks; track net.id) {
+            <button
+                type="button"
+                (click)="setNetworkStyle(net.id)"
+                class="p-3.5 rounded-lg border text-left transition-colors cursor-pointer"
+                [ngClass]="config().networkStyle === net.id
+                ? 'net-btn-active'
+                : 'net-btn-inactive'">
+
+                <div class="text-xs font-semibold">
+                    {{ net.title }}
+                </div>
+
+                <div class="text-[11px] text-slate-400 mt-1 leading-relaxed">
+                    {{ net.desc }}
+                </div>
+            </button>
+            }
+        </div>
+    </div>
+
+    <div class="pt-5 border-t border-emerald-950/80 grid grid-cols-1 sm:grid-cols-2 gap-6">
+
+        <div>
+            <div class="flex items-center justify-between text-xs mb-2">
+                <span class="font-medium text-slate-200">
+                Intensidade da Malha de Rede
+                </span>
+
+                <span class="font-mono text-emerald-400 tabular-nums">
+                {{ getOpacityPercentage() }}%
+                </span>
+            </div>
+
+            <input
+                type="range"
+                min="0.15"
+                max="1"
+                step="0.05"
+                [value]="config().networkOpacity"
+                (input)="updateOpacity($event)"
+                class="w-full accent-emerald-400 cursor-pointer" />
+        </div>
+
+        <div class="flex flex-col justify-center gap-3">
+
+            <label class="flex items-center gap-2.5 text-xs text-slate-200 cursor-pointer">
+                <input
+                    type="checkbox"
+                    [checked]="config().showNetworkIcons"
+                    (change)="toggleExibirIcones($event)"
+                    class="rounded accent-emerald-400 w-4 h-4" />
+
+                <span>
+                    Exibir ícones sutis de rede (Servidor, DB, Cloud, Git, API)
+                </span>
+            </label>
+
+            <label class="flex items-center gap-2.5 text-xs text-slate-200 cursor-pointer">
+                <input
+                    type="checkbox"
+                    [checked]="config().showSubtleGrid"
+                    (change)="toggleExibirMicroGrid($event)"
+                    class="rounded accent-emerald-400 w-4 h-4" />
+
+                <span>Exibir micro-grid arquitetural de fundo</span>
+            </label>
+        </div>
+    </div>
+
+</div>

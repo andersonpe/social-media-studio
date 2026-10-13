@@ -24,6 +24,7 @@ import { SubnavLinkedInComponent } from './components/subnav/subnav.component';
 import { SelectViewModeEventData } from './types/SelectViewModeEventData';
 import { BannerNetworkIconsComponent } from '@/app/pages/linkedin/components/technology-icons/technology-icons.component';
 import { LinkedInTabStackComponent } from './components/tabs/tab-stack/tab-stack.component';
+import { LinkedInTabLayoutComponent } from './components/tabs/tab-layout/tab-layout.component';
 
 const DEFAULT_CONFIG: BannerConfig = {
   fullName: 'Anderson Pereira da Silva',
@@ -46,14 +47,13 @@ const DEFAULT_CONFIG: BannerConfig = {
 };
 
 @Component({
-  imports: [CommonModule, SubnavLinkedInComponent, BannerNetworkIconsComponent, LucideCheck, LucideFileCode, LucideDownload, LucideCopy, LucideDownload, LucideLayers, LucideLayout, LucideType, LucideSparkles, BannerCanvasComponent, LinkedInTabStackComponent],
+  imports: [CommonModule, SubnavLinkedInComponent, LinkedInTabLayoutComponent, BannerNetworkIconsComponent, LucideCheck, LucideFileCode, LucideDownload, LucideCopy, LucideDownload, LucideLayers, LucideLayout, LucideType, LucideSparkles, BannerCanvasComponent, LinkedInTabStackComponent],
   selector: 'apds-social-media-studio-linkedin',
   standalone: true,
   styleUrl: './linkedin.component.scss',
   templateUrl: './linkedin.component.html',
 })
 export class LinkedInComponent {
-
   protected readonly title = signal('social-media-studio');
   exportBannerService = inject(ExportBannerService);
 
@@ -65,85 +65,6 @@ export class LinkedInComponent {
   copiedSuccess = signal<boolean>(false);
 
   svgRef = viewChild<ElementRef<SVGSVGElement>>('svgCanvas');
-
-   readonly presets: { id: LayoutPreset; title: string; desc: string }[] = [
-    {
-      id: 'right-aligned',
-      title: 'Executivo Direita (Ideal)',
-      desc: 'Deixa a esquerda livre para a foto do LinkedIn e destaca a malha de rede.',
-    },
-    {
-      id: 'centered',
-      title: 'Centralizado Clássico',
-      desc: 'Simetria total no centro do banner com nós de rede nas laterais.',
-    },
-    {
-      id: 'editorial-split',
-      title: 'Editorial Assimétrico',
-      desc: 'Alinhamento à esquerda com barra arquitetural divisória.',
-    }
-  ];
-
-  readonly networks: { id: NetworkStyle; title: string; desc: string }[] = [
-    {
-      id: 'constellation',
-      title: 'Constelação & Nós',
-      desc: 'Malha de conectividade distribuída com ícones sutis de servidor, banco e nuvem.',
-    },
-    {
-      id: 'hex-topology',
-      title: 'Topologia Hexagonal',
-      desc: 'Clusters geométricos modulares inspirados em arquitetura de microsserviços.',
-    },
-    {
-      id: 'circuit-flow',
-      title: 'Fluxo de Dados',
-      desc: 'Trilhas minimalistas de barramento de dados com terminais de rede.',
-    },
-  ];
-
-
-
-
-  getOpacityPercentage(): number {
-    return Math.round(this.config().networkOpacity * 100);
-  }
-
-  updateOpacity(event: Event) {
-    const inputElement = event.target as HTMLInputElement;
-    const value = parseFloat(inputElement.value);
-    
-    this.config.update(prev => ({
-      ...prev,
-      networkOpacity: value
-    }));
-  }  
-
-  toggleExibirIcones(event: Event) {
-    const checkbox = event.target as HTMLInputElement;
-    
-    this.config.update(prev => ({
-      ...prev,
-      showNetworkIcons: checkbox.checked // true ou false
-    }));
-  }
-
-  toggleExibirMicroGrid(event: Event) {
-    const checkbox = event.target as HTMLInputElement;
-    
-    this.config.update(prev => ({
-      ...prev,
-      showSubtleGrid: checkbox.checked // true ou false
-    }));
-  }
-
-  setNetworkStyle(netId: NetworkStyle) {
-    this.config.update(prev => ({ ...prev, networkStyle: netId }))
-  }
-
-  setLayoutPreset(presetId: LayoutPreset) {
-    this.config.update(prev => ({ ...prev, layoutPreset: presetId }))
-  }
 
   setViewModeEventHandler(event: SelectViewModeEventData) {
     event.event.preventDefault();
@@ -343,119 +264,3 @@ setTagline(value: string): void {
 }
 
 }
-
-/*
-
-import {
-  BannerCanvas,
-  BannerConfig,
-  FontChoice,
-  LayoutPreset,
-  LogoBadgeStyle,
-  NetworkStyle,
-} from './components/BannerCanvas';
-import { INITIAL_TECH_STACK, TechId, renderTechLogoGroup } from './components/TechLogos';
-
-
-const DEFAULT_CONFIG: BannerConfig = {
-  fullName: 'Anderson Pereira da Silva',
-  roleTitle: 'Desenvolvedor de Software',
-  tagline: 'Arquitetura de Sistemas · Aplicações Web Escaláveis · Bancos de Dados Corporativos',
-  showTagline: false,
-  bgColor: '#06392f',
-  accentColor: '#10b981',
-  layoutPreset: 'right-aligned',
-  networkStyle: 'constellation',
-  networkOpacity: 0.85,
-  logoBadgeStyle: 'glass-pill',
-  monochromeLogos: false,
-  fontFamily: 'Outfit',
-  nameFontSize: 52,
-  roleFontSize: 25,
-  showSubtleGrid: true,
-  showNetworkIcons: true,
-  techStack: INITIAL_TECH_STACK,
-};
-
-type ViewMode = 'banner-only' | 'linkedin-mockup' | 'safe-zone';
-
-export default function App() {
-  const [config, setConfig] = useState<BannerConfig>(DEFAULT_CONFIG);
-  const [viewMode, setViewMode] = useState<ViewMode>('banner-only');
-  const [activeTab, setActiveTab] = useState<'layout' | 'typography' | 'stack'>('layout');
-  const [isExporting, setIsExporting] = useState(false);
-  const [copiedSuccess, setCopiedSuccess] = useState(false);
-  const [exportNotice, setExportNotice] = useState<string | null>(null);
-
-  
-
-  const handleDownloadPng = async (scale: 1 | 2 = 1) => {
-    if (!svgRef.current || isExporting) return;
-    setIsExporting(true);
-    try {
-      const suffix = scale === 2 ? '3168x792-2x' : '1584x396';
-      await exportSvgToPng(
-        svgRef.current,
-        scale,
-        `banner-linkedin-anderson-pereira-${suffix}.png`
-      );
-      setExportNotice(`PNG (${1584 * scale} × ${396 * scale} px) exportado com sucesso`);
-      setTimeout(() => setExportNotice(null), 3500);
-    } finally {
-      setIsExporting(false);
-    }
-  };
-
-
-
-  const handleCopyClipboard = async () => {
-    if (!svgRef.current) return;
-    const ok = await copySvgAsPngToClipboard(svgRef.current);
-    if (ok) {
-      setCopiedSuccess(true);
-      setExportNotice('Imagem 1584 × 396 px copiada para a área de transferência');
-      setTimeout(() => {
-        setCopiedSuccess(false);
-        setExportNotice(null);
-      }, 3000);
-    } else {
-      await handleDownloadPng(1);
-    }
-  };
-
-  const handleReset = () => {
-    setConfig(DEFAULT_CONFIG);
-    setExportNotice('Configurações originais restauradas (#06392f)');
-    setTimeout(() => setExportNotice(null), 2500);
-  };
-
-  const toggleTechItem = (id: TechId) => {
-    setConfig((prev) => {
-      const enabledCount = prev.techStack.filter((t) => t.enabled).length;
-      return {
-        ...prev,
-        techStack: prev.techStack.map((item) => {
-          if (item.id !== id) return item;
-          if (item.enabled && enabledCount <= 1) return item;
-          return { ...item, enabled: !item.enabled };
-        }),
-      };
-    });
-  };
-
-  const moveTechItem = (index: number, direction: -1 | 1) => {
-    const targetIndex = index + direction;
-    if (targetIndex < 0 || targetIndex >= config.techStack.length) return;
-    setConfig((prev) => {
-      const list = [...prev.techStack];
-      const temp = list[index];
-      list[index] = list[targetIndex];
-      list[targetIndex] = temp;
-      return { ...prev, techStack: list };
-    });
-  };
-
-  return (
-  );
-}*/
-
