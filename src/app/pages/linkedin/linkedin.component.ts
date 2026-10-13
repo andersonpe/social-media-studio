@@ -25,6 +25,7 @@ import { SelectViewModeEventData } from './types/SelectViewModeEventData';
 import { BannerNetworkIconsComponent } from '@/app/pages/linkedin/components/technology-icons/technology-icons.component';
 import { LinkedInTabStackComponent } from './components/tabs/tab-stack/tab-stack.component';
 import { LinkedInTabLayoutComponent } from './components/tabs/tab-layout/tab-layout.component';
+import { LinkedInTabTypographyComponent } from './components/tabs/tab-typography/tab-typography.component';
 
 const DEFAULT_CONFIG: BannerConfig = {
   fullName: 'Anderson Pereira da Silva',
@@ -47,7 +48,20 @@ const DEFAULT_CONFIG: BannerConfig = {
 };
 
 @Component({
-  imports: [CommonModule, SubnavLinkedInComponent, LinkedInTabLayoutComponent, BannerNetworkIconsComponent, LucideCheck, LucideFileCode, LucideDownload, LucideCopy, LucideDownload, LucideLayers, LucideLayout, LucideType, LucideSparkles, BannerCanvasComponent, LinkedInTabStackComponent],
+  imports: [
+    CommonModule, 
+    SubnavLinkedInComponent, 
+    LinkedInTabLayoutComponent, 
+    LinkedInTabTypographyComponent, 
+    LucideDownload, 
+    LucideDownload, 
+    LucideLayers, 
+    LucideLayout, 
+    LucideType, 
+    LucideSparkles, 
+    BannerCanvasComponent, 
+    LinkedInTabStackComponent
+  ],
   selector: 'apds-social-media-studio-linkedin',
   standalone: true,
   styleUrl: './linkedin.component.scss',
@@ -200,67 +214,72 @@ export class LinkedInComponent {
       .map(tech => tech.name);
   }
 
-enabledTechCount(): number {
-  return this.config()
-    .techStack
-    .filter(tech => tech.enabled)
-    .length;
-}
+  enabledTechCount(): number {
+    return this.config()
+      .techStack
+      .filter(tech => tech.enabled)
+      .length;
+  }
 
-  setFullName(value: string): void {
+  /**
+   * Evento handlers
+   * 
+   */
+
+  setFullNameEventHandler(value: string): void {
     this.config.update(current => ({
       ...current,
       fullName: value
     }));
   }
 
-  setRoleTitle(value: string): void {
+  setRoleTitleEventHandler(value: string): void {
     this.config.update(current => ({
       ...current,
       roleTitle: value
     }));
-  }
+  }  
 
-  setFontFamily(value: BannerConfig['fontFamily']): void {
+  setFontFamilyEventHandler(value: BannerConfig['fontFamily']): void {
     this.config.update(current => ({
       ...current,
       fontFamily: value
     }));
   }
 
-  setNameFontSize(value: number): void {
-  this.config.update(current => ({
-    ...current,
-    nameFontSize: value
-  }));
-}
+  setNameFontSizeEventHandler(value: number): void {
+    this.config.update(current => ({
+      ...current,
+      nameFontSize: value
+    }));
+  } 
 
-setRoleFontSize(value: number): void {
-  this.config.update(current => ({
-    ...current,
-    roleFontSize: value
-  }));
-}
+  setRoleFontSizeEventHandler(value: number): void {
+    this.config.update(current => ({
+      ...current,
+      roleFontSize: value
+    }));
+  }
+  
+  setBgColorEventHandler(value: string): void {
+    this.config.update(current => ({
+      ...current,
+      bgColor: value
+    }));
+  }  
 
-setBgColor(value: string): void {
-  this.config.update(current => ({
-    ...current,
-    bgColor: value
-  }));
-}
-
-setShowTagline(value: boolean): void {
-  this.config.update(current => ({
-    ...current,
-    showTagline: value
-  }));
-}
-
-setTagline(value: string): void {
-  this.config.update(current => ({
-    ...current,
-    tagline: value
-  }));
-}
+  setShowTaglineEventHandler(value: boolean): void {
+    this.config.update(current => ({
+      ...current,
+      showTagline: value
+    }));
+  }  
+  
+  setTaglineEventHandler(value: string): void {
+    this.config.update(current => ({
+      ...current,
+      tagline: value
+    }));
+  }
 
 }

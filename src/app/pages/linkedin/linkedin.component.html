@@ -1,6 +1,6 @@
 
-<div class="min-h-screen bg-[#070d0b] text-slate-100 flex flex-col">
-
+<div class="min-h-screen  text-slate-100 flex flex-col">
+<!-- bg-[#070d0b] -->
   <apds-sm-linkedin-subnav
     [viewMode] = "viewMode()"
     [isExporting] = "isExporting()"
@@ -346,149 +346,25 @@
         <!-- Technology stack tab -->
         @if (activeTab() === 'stack') {
           <apds-sm-linkedin-tab-stack
-            [config]="config()">
+            [config]="config()"
+          >
           </apds-sm-linkedin-tab-stack>
         }
 
         <!-- Typography tab -->
         @if (activeTab() === 'typography') {
-
-          <div class="space-y-5">
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-
-              <div>
-                <label class="block text-xs font-medium text-slate-300 mb-1.5">
-                  Nome Principal
-                </label>
-
-                <input
-                  type="text"
-                  [value]="config().fullName"
-                  (input)="setFullName($any($event.target).value)"
-                  class="w-full px-3.5 py-2 rounded-lg bg-[#070d0b] border border-emerald-900/70 text-sm text-white focus:outline-none focus:border-emerald-400" />
-              </div>
-
-              <div>
-                <label class="block text-xs font-medium text-slate-300 mb-1.5">
-                  Subtítulo / Cargo Profissional
-                </label>
-
-                <input
-                  type="text"
-                  [value]="config().roleTitle"
-                  (input)="setRoleTitle($any($event.target).value)"
-                  class="w-full px-3.5 py-2 rounded-lg bg-[#070d0b] border border-emerald-900/70 text-sm text-white focus:outline-none focus:border-emerald-400" />
-              </div>
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
-
-              <div>
-                <label class="block text-xs font-medium text-slate-300 mb-1.5">
-                  Família Tipográfica Principal
-                </label>
-
-                <select
-                  [value]="config().fontFamily"
-                  (change)="setFontFamily($any($event.target).value)"
-                  class="w-full px-3 py-2 rounded-lg bg-[#070d0b] border border-emerald-900/70 text-xs text-white focus:outline-none focus:border-emerald-400">
-
-                  <option value="Outfit">Outfit (Geométrica Executiva)</option>
-                  <option value="Plus Jakarta Sans">Plus Jakarta Sans (Editorial Moderna)</option>
-                  <option value="Syne">Syne (Display Arquitetural)</option>
-                </select>
-              </div>
-
-              <div>
-                <div class="flex items-center justify-between text-xs mb-1.5">
-                  <span class="text-slate-300">Tamanho do Nome</span>
-
-                  <span class="font-mono text-emerald-400 tabular-nums">
-                    {{ config().nameFontSize }}px
-                  </span>
-                </div>
-
-                <input
-                  type="range"
-                  min="40"
-                  max="64"
-                  [value]="config().nameFontSize"
-                  (input)="setNameFontSize(+$any($event.target).value)"
-                  class="w-full accent-emerald-400 cursor-pointer" />
-              </div>
-
-              <div>
-                <div class="flex items-center justify-between text-xs mb-1.5">
-                  <span class="text-slate-300">Tamanho do Cargo</span>
-
-                  <span class="font-mono text-emerald-400 tabular-nums">
-                    {{ config().roleFontSize }}px
-                  </span>
-                </div>
-
-                <input
-                  type="range"
-                  min="18"
-                  max="32"
-                  [value]="config().roleFontSize"
-                  (input)="setRoleFontSize(+$any($event.target).value)"
-                  class="w-full accent-emerald-400 cursor-pointer" />
-              </div>
-            </div>
-
-            <div class="pt-4 border-t border-emerald-950/80 grid grid-cols-1 sm:grid-cols-2 gap-4 items-center">
-
-              <div>
-                <label class="block text-xs font-medium text-slate-300 mb-1.5">
-                  Cor de Fundo Principal
-                </label>
-
-                <div class="flex items-center gap-2.5">
-
-                  <input
-                    type="color"
-                    [value]="config().bgColor"
-                    (input)="setBgColor($any($event.target).value)"
-                    class="w-9 h-9 rounded cursor-pointer bg-transparent border border-emerald-800" />
-
-                  <input
-                    type="text"
-                    [value]="config().bgColor"
-                    (input)="setBgColor($any($event.target).value)"
-                    class="w-32 px-3 py-1.5 rounded-lg bg-[#070d0b] border border-emerald-900/70 font-mono text-xs text-white" />
-
-                  <button
-                    type="button"
-                    (click)="setBgColor('#06392f')"
-                    class="px-2.5 py-1.5 rounded bg-emerald-950/80 text-emerald-300 text-xs hover:bg-emerald-900 cursor-pointer">
-                    Fixar #06392f
-                  </button>
-                </div>
-              </div>
-
-              <div>
-                <label class="flex items-center gap-2 text-xs text-slate-200 cursor-pointer mb-1.5">
-
-                  <input
-                    type="checkbox"
-                    [checked]="config().showTagline"
-                    (change)="setShowTagline($any($event.target).checked)"
-                    class="rounded accent-emerald-400 w-4 h-4" />
-
-                  <span>Incluir linha de especialidade adicional</span>
-                </label>
-
-                @if (config().showTagline) {
-                  <input
-                    type="text"
-                    [value]="config().tagline"
-                    (input)="setTagline($any($event.target).value)"
-                    class="w-full px-3 py-1.5 rounded-lg bg-[#070d0b] border border-emerald-900/70 text-xs text-white" />
-                }
-              </div>
-            </div>
-          </div>
+          <apds-sm-linkedin-tab-typography 
+            [config] = "config()"
+            (onSetFullNameEvent) = "setFullNameEventHandler($event)"; 
+            (onSetRoleTitleEvent) = "setRoleTitleEventHandler($event)"; 
+            (onSetFontFamilyEvent) = "setFontFamilyEventHandler($event)"; 
+            (onSetNameFontSizeEvent) = "setNameFontSizeEventHandler($event)" 
+            (onSetRoleFontSizeEvent) = "setRoleFontSizeEventHandler($event)"
+            (onSetBgColorEvent) = "setBgColorEventHandler($event)"
+            (onSetShowTaglineEvent) = "setShowTaglineEventHandler($event)" 
+            (onSetTagLineEvent) = "setTaglineEventHandler($event)"  
+          >
+          </apds-sm-linkedin-tab-typography>
         }
       </div>
     </section>
