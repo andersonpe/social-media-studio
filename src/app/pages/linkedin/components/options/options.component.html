@@ -1,0 +1,91 @@
+<div>
+    <h2 class="text-base font-semibold text-white">
+    Personalização do Estúdio
+    </h2>
+
+    <p class="text-xs text-slate-400 mt-1">
+    Ajuste o posicionamento, a malha de rede, tipografia ou estilo dos logos antes de exportar.
+    </p>
+</div>
+
+<div class="flex flex-col gap-1.5">
+    <button
+        type="button"
+        (click)="onSelectTabEvent.emit('layout')"
+        class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-lg text-xs font-medium transition-colors cursor-pointer"
+        [ngClass]="currentTab() === 'layout'
+            ? 'bg-[#06392f] text-white'
+            : 'text-slate-400 hover:text-slate-200 hover:bg-emerald-950/40'">
+
+    <span class="flex items-center gap-2.5">
+        <svg lucideLayoutPanelLeft class="w-4 h-4 text-emerald-400"></svg>
+        <span>01. Layout &amp; Rede Minimalista</span>
+    </span>
+
+    <span class="font-mono text-[11px] opacity-75">Malha</span>
+    </button>
+
+    <button
+        type="button"
+        (click)="onSelectTabEvent.emit('stack')"
+        class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-lg text-xs font-medium transition-colors cursor-pointer"
+        [ngClass]="currentTab() === 'stack'
+            ? 'bg-[#06392f] text-white'
+            : 'text-slate-400 hover:text-slate-200 hover:bg-emerald-950/40'">
+
+    <span class="flex items-center gap-2.5">
+        <svg lucideLayers class="w-4 h-4 text-emerald-400"></svg>
+        <span>02. Logos &amp; Tecnologias ({{ config().techStack.length }})</span>
+    </span>
+
+    <span class="font-mono text-[11px] opacity-75 tabular-nums">
+        {{ enabledTechCount() }}/{{ config().techStack.length }}
+    </span>
+    </button>
+
+    <button
+        type="button"
+        (click)="onSelectTabEvent.emit('typography')"
+        class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-lg text-xs font-medium transition-colors cursor-pointer"
+        [ngClass]="currentTab() === 'typography'
+            ? 'bg-[#06392f] text-white'
+            : 'text-slate-400 hover:text-slate-200 hover:bg-emerald-950/40'">
+
+    <span class="flex items-center gap-2.5">
+        <svg lucideType class="w-4 h-4 text-emerald-400"></svg>
+        <span>03. Textos, Fontes &amp; Cores</span>
+    </span>
+
+    <span class="font-mono text-[11px] opacity-75">
+        {{ config().fontFamily }}
+    </span>
+    </button>
+</div>
+
+<!-- Checklist -->
+<div class="pt-4 border-t border-emerald-950/80 space-y-2.5 text-xs text-slate-400">
+
+    <div class="font-medium text-slate-300">
+    Checklist do Briefing
+    </div>
+
+    <div class="flex items-center justify-between">
+        <span>Resolução nativa</span>
+        <span class="font-mono text-emerald-400 tabular-nums">1584 × 396 px</span>
+    </div>
+
+    <div class="flex items-center justify-between">
+        <span>Cor principal solicitada</span>
+        <span class="font-mono text-emerald-400">#06392f</span>
+    </div>
+
+    <div class="flex items-center justify-between">
+        <span>Elementos visuais</span>
+        <span class="text-slate-200">Ícones sutis de rede</span>
+    </div>
+
+    <div class="flex items-center justify-between">
+        <span>Contraste WCAG AA</span>
+        <span class="font-mono text-emerald-400 tabular-nums">12.4 : 1</span>
+    </div>
+</div>

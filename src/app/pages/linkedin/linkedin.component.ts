@@ -1,17 +1,7 @@
 import { Component, ElementRef, inject, signal, viewChild } from '@angular/core';
 import {
-  LucideCheck,
-  LucideCopy,
   LucideDownload,
-  LucideEye,
-  LucideFileCode,
-  LucideLayers,
-  LucideLayout,
-  LucideRotateCcw,
-  LucideSliders,
   LucideSparkles,
-  LucideType,
-  LucideUser,
 } from '@lucide/angular';
 import { ExportBannerService } from '@/app/services/banner/export-banner.service';
 import { ViewMode } from '@/app/pages/linkedin/types/ViewMode/ViewMode';
@@ -26,6 +16,7 @@ import { BannerNetworkIconsComponent } from '@/app/pages/linkedin/components/tec
 import { LinkedInTabStackComponent } from './components/tabs/tab-stack/tab-stack.component';
 import { LinkedInTabLayoutComponent } from './components/tabs/tab-layout/tab-layout.component';
 import { LinkedInTabTypographyComponent } from './components/tabs/tab-typography/tab-typography.component';
+import { LinkedInOptionsComponent } from './components/options/options.component';
 
 const DEFAULT_CONFIG: BannerConfig = {
   fullName: 'Anderson Pereira da Silva',
@@ -55,12 +46,10 @@ const DEFAULT_CONFIG: BannerConfig = {
     LinkedInTabTypographyComponent, 
     LucideDownload, 
     LucideDownload, 
-    LucideLayers, 
-    LucideLayout, 
-    LucideType, 
     LucideSparkles, 
     BannerCanvasComponent, 
-    LinkedInTabStackComponent
+    LinkedInTabStackComponent,
+    LinkedInOptionsComponent
   ],
   selector: 'apds-social-media-studio-linkedin',
   standalone: true,
@@ -214,15 +203,8 @@ export class LinkedInComponent {
       .map(tech => tech.name);
   }
 
-  enabledTechCount(): number {
-    return this.config()
-      .techStack
-      .filter(tech => tech.enabled)
-      .length;
-  }
-
   /**
-   * Evento handlers
+   * Event handlers
    * 
    */
 
@@ -280,6 +262,10 @@ export class LinkedInComponent {
       ...current,
       tagline: value
     }));
+  }
+
+  onSelectTabEventHandler(value: 'layout' | 'typography' | 'stack'): void {
+    this.activeTab.set(value);
   }
 
 }
