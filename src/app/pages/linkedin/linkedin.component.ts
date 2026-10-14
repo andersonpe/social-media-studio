@@ -9,7 +9,7 @@ import { CommonModule } from '@angular/common';
 import { BannerConfig, LayoutPreset, LogoBadgeStyle, NetworkStyle } from '@/app/types/BannerConfig/BannerConfig';
 import { INITIAL_TECH_STACK } from '@/app/data/InitialDataStack';
 import { BannerCanvasComponent } from '@/app/component/banner-canvas/banner-canvas.component';
-import { TechId } from '@/app/types/TechItem/TechItem';
+import { OnModeTechItemEvent, TechId } from '@/app/types/TechItem/TechItem';
 import { SubnavLinkedInComponent } from './components/subnav/subnav.component';
 import { SelectViewModeEventData } from './types/SelectViewModeEventData';
 import { BannerNetworkIconsComponent } from '@/app/pages/linkedin/components/technology-icons/technology-icons.component';
@@ -266,6 +266,44 @@ export class LinkedInComponent {
 
   onSelectTabEventHandler(value: 'layout' | 'typography' | 'stack'): void {
     this.activeTab.set(value);
+  }
+
+  onSetLogoBadgeStyleEventHandler(style: LogoBadgeStyle) {
+    this.config.update(prev => ({ ...prev, logoBadgeStyle: style }))  
+  }
+  
+  onSetMonochromeLogosEventHandler() {
+    this.config.update(prev => ({ ...prev, monochromeLogos: true }))
+  }
+            
+  onSetColourfulLogosEventHandler() {
+    this.config.update(prev => ({ ...prev, monochromeLogos: false }))
+  }
+
+  onModeTechItemEventHandler(event: OnModeTechItemEvent) {
+    const targetIndex = event.index + event.direction;
+    if (targetIndex < 0 || targetIndex >= this.config().techStack.length) return;
+      this.config.update(prev => {
+        const list = [...prev.techStack];
+        const temp = list[event.index];
+        list[event.index] = list[targetIndex];
+        list[targetIndex] = temp;
+        return { ...prev, techStack: list };
+      });
+  }
+
+  onToggleTechItemEventHandler(event: TechId) {
+    this.config.update(prev => {
+      const enabledCount = prev.techStack.filter((t) => t.enabled).length;
+      return {
+        ...prev,
+        techStack: prev.techStack.map((item) => {
+          if (item.id !== event) return item;
+          if (item.enabled && enabledCount <= 1) return item;
+          return { ...item, enabled: !item.enabled };
+        }),
+      };
+    });
   }
 
 }

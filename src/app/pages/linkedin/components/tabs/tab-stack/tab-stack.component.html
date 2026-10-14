@@ -124,7 +124,7 @@
 
                       <button
                         type="button"
-                        (click)="moveTechItem(idx, -1)"
+                        (click)="moveTechItem({index: idx, direction: -1})"
                         [disabled]="idx === 0"
                         class="px-1.5 py-0.5 text-[11px] text-slate-400 hover:text-white disabled:opacity-30 cursor-pointer"
                         title="Mover para a esquerda">
@@ -143,7 +143,7 @@
 
                       <button
                         type="button"
-                        (click)="moveTechItem(idx, 1)"
+                        (click)="moveTechItem({index: idx, direction: 1})"
                         [disabled]="idx === config().techStack.length - 1"
                         class="px-1.5 py-0.5 text-[11px] text-slate-400 hover:text-white disabled:opacity-30 cursor-pointer"
                         title="Mover para a direita">

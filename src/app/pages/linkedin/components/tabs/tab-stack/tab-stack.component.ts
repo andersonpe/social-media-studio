@@ -1,8 +1,8 @@
 import { BannerConfig, LogoBadgeStyle } from "@/app/types/BannerConfig/BannerConfig";
 import { CommonModule } from "@angular/common";
-import { Component, input } from "@angular/core";
+import { Component, input, output } from "@angular/core";
 import { BannerNetworkIconsComponent } from "../../technology-icons/technology-icons.component";
-import { TechId } from "@/app/types/TechItem/TechItem";
+import { OnModeTechItemEvent, TechId } from "@/app/types/TechItem/TechItem";
 
 @Component({
   imports: [CommonModule, BannerNetworkIconsComponent],
@@ -13,6 +13,11 @@ import { TechId } from "@/app/types/TechItem/TechItem";
 })
 export class LinkedInTabStackComponent {
   config = input.required<BannerConfig>();
+  onSetLogoBadgeStyleEvent = output<LogoBadgeStyle>(); 
+  onSetMonochromeLogosEvent = output<void>(); 
+  onSetColourfulLogosEvent = output<void>(); 
+  onMoveTechItemEvent = output<OnModeTechItemEvent>();
+  onToggleTechItemEvent = output<TechId>();
 
   readonly estilos: { id: LogoBadgeStyle; title: string; desc: string }[] = [
     {
@@ -33,27 +38,19 @@ export class LinkedInTabStackComponent {
   ];
 
   setLogoBadgeStyle(style: LogoBadgeStyle) {
-      // this.config.update(prev => ({ ...prev, logoBadgeStyle: style }))
+    this.onSetLogoBadgeStyleEvent.emit(style);
   }
 
   setMonochromeLogos() {
-      // this.config.update(prev => ({ ...prev, monochromeLogos: value }))
+    this.onSetMonochromeLogosEvent.emit();
   }
 
   setColourfulLogos() {
-
+    this.onSetColourfulLogosEvent.emit();
   }
 
-  moveTechItem = (index: number, direction: -1 | 1) => {
-    const targetIndex = index + direction;
-    if (targetIndex < 0 || targetIndex >= this.config().techStack.length) return;
-      /*this.config.update(prev => {
-        const list = [...prev.techStack];
-        const temp = list[index];
-        list[index] = list[targetIndex];
-        list[targetIndex] = temp;
-        return { ...prev, techStack: list };
-      });*/
+  moveTechItem = (event: OnModeTechItemEvent) => {
+    this.onMoveTechItemEvent.emit(event);
   };
 
   techInitials(name: string): string {
@@ -78,17 +75,7 @@ export class LinkedInTabStackComponent {
   }
 
   toggleTechItem = (id: TechId) => {
-    /*this.config.update(prev => {
-      const enabledCount = prev.techStack.filter((t) => t.enabled).length;
-      return {
-        ...prev,
-        techStack: prev.techStack.map((item) => {
-          if (item.id !== id) return item;
-          if (item.enabled && enabledCount <= 1) return item;
-          return { ...item, enabled: !item.enabled };
-        }),
-      };
-    });*/
+    this.onToggleTechItemEvent.emit(id);
   };  
 
 }

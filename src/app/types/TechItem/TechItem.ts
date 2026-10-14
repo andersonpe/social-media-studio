@@ -16,3 +16,8 @@ export interface TechItem {
   accentBg: string;
   enabled: boolean;
 }
+
+export interface OnModeTechItemEvent {
+  index: number, 
+  direction: -1 | 1
+}

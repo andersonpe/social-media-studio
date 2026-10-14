@@ -250,6 +250,11 @@
         @if (activeTab() === 'stack') {
           <apds-sm-linkedin-tab-stack
             [config]="config()"
+            (onSetLogoBadgeStyleEvent) = "onSetLogoBadgeStyleEventHandler($event)"
+            (onSetMonochromeLogosEvent) = "onSetMonochromeLogosEventHandler()"
+            (onSetColourfulLogosEvent) = "onSetColourfulLogosEventHandler()"
+            (onMoveTechItemEvent) = "onModeTechItemEventHandler($event)"
+            (onToggleTechItemEvent) = "onToggleTechItemEventHandler($event)"
           >
           </apds-sm-linkedin-tab-stack>
         }

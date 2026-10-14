@@ -21,7 +21,6 @@ export class LinkedInTabTypographyComponent {
   onSetTagLineEvent = output<string>(); 
 
   setFullName(value: string): void {
-    console.log(value);
     this.onSetFullNameEvent.emit(value);
   }
 
